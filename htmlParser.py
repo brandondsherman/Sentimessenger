@@ -3,11 +3,12 @@ import lxml
 import json
 import rpy2.robjects as robj
 import os
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, jsonify
+from flask_cors import CORS, cross_origin
 from werkzeug import secure_filename
 
 
-doSenti = setUpSentiment()
+
 
 def setUpSentiment():
 	robj.r('''
@@ -18,18 +19,25 @@ def setUpSentiment():
 	'''	
 	)
 	return(robj.r("getSenti"))
+doSenti = setUpSentiment()
 
-doSenti = robj.r("getSenti")
 
 def startParsing(htmlFile):
-	allSoup = BeautifulSoup(open(soup),"lxml")
+	allSoup = BeautifulSoup(open(htmlFile),"lxml")
+	print("in here with" + htmlFile)
 	return(parseAllThreadsSoup(allSoup))
+	
 
 def parseOneMessageSoup(messageSoup, actualMessageSoup):
     message = {}
     message["User"] = messageSoup.find_all("span", class_ = "user")[0].get_text()
     message["Message"] = actualMessageSoup.get_text()
-    message["Date"] = messageSoup.find_all("span", class_ = "meta")[0].get_text()
+    rawDate = messageSoup.find_all("span", class_ = "meta")[0].get_text()
+    message["Date"] = rawDate
+    dateInfo = rawDate.replace(",", "").split(" ")
+    message["Month"] = dateInfo[1]
+    message["Day"] = dateInfo[2]
+    message["Year"] = dateInfo[3]
     calcedSentiments = doSenti(message["Message"])
     sentiments = {}
     sentiments["anger"] = tuple(calcedSentiments.rx2(1))[0]
@@ -72,12 +80,16 @@ def parseAllThreadsSoup(allThreads):
         parsedThreads.append(parseOneThreadSoup(threadSoup))
     return(parsedThreads)
 
+  
+    
+
 #________________________flask stuff here
 
 
 UPLOAD_FOLDER = '/tmp/'
-ALLOWED_EXTENTIONS = set(['txt','.htm', '.html'])
+ALLOWED_EXTENTIONS = set(['txt','htm', 'html'])
 app = Flask(__name__)
+CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
@@ -87,11 +99,13 @@ def allowed_file(filename):
 @app.route("/", methods = ['GET', 'POST'])
 def index():
 	if request.method == 'POST':
-		file = request.files['files']
+		file = request.files['file']
 		if file and allowed_file(file.filename):
 			filename = secure_filename(file.filename)
-			#file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			return startParsing(filename)
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			rtnDict = startParsing("/tmp/"+filename)
+			os.remove("/tmp/"+filename)
+			return(json.dumps(rtnDict))
 	return ""
 
 
