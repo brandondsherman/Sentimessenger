@@ -1,0 +1,55 @@
+/* XKCD3 CSS */
+@font-face {
+  font-family: "xkcd";
+  src: url('/xkcd.ttf');
+}
+#includeView {
+  font-family: "xkcd", sans-serif;
+  font-size: 26px;
+  color: #333;
+  text-align: center;
+  /*margin-top: 75px;*/
+}
+
+text.title {
+  font-size: 30px;
+}
+path {
+  fill: none;
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+path.axis {
+  stroke: black;
+}
+path.bgline {
+  stroke: white;
+  stroke-width: 6px;
+}
+/* END XKCD3 */
+
+#comic {
+  position: relative;
+  width: 680px;
+  left: 50%;
+  margin-left: -340px;
+}
+
+#comic svg {
+  /*height: 100%;*/
+  border: 1px solid black;
+  margin-bottom: 10px;
+  padding-bottom: 25px;
+}
+
+.span2 svg {
+  color: red;
+}
+
+.uploadForm {
+  text-align: left;
+  width: 500px;
+  left: 40px;
+  margin-left: 125px;
+}
