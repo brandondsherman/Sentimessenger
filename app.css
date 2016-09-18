@@ -1,7 +1,7 @@
 /* XKCD3 CSS */
 @font-face {
   font-family: "xkcd";
-  src: url('/xkcd.ttf');
+  src: url('xkcd.ttf');
 }
 #includeView {
   font-family: "xkcd", sans-serif;
