@@ -12,7 +12,7 @@
 	* ![General Tab](/images/generalTab.png)
 * Click on the link to "Download a copy" 
 * Then click on the green button "Start My Archive"
-* You'll be prombted for you fb password
+* You'll be prompted for your Facebook password
 * After successfully putting in your password it has another popup to confirm the download. Click on "Start My Archive"
 * They will email you your download is ready. This could take a while.
 * The email will have a link that once clicked will begin your download.
