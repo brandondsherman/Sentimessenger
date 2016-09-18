@@ -2,6 +2,7 @@
 
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
+  'angularSpinner',
   'lr.upload',
   'myApp.comic',
   'myApp.emotive',
@@ -12,16 +13,11 @@ config(['$locationProvider', function($locationProvider, $routeProvider) {
 }]).controller('appCtrl', ['$scope', '$location','$http', function($scope, $location, $http) {
 
   $scope.onGlobalSuccess = function (response) {
-    // console.log('AppCtrl.onSuccess', response);
-    //
-    // $scope.legends = response.data.map(function(thread){return thread.Members});
-    //
-    // $scope.sentimentData = spoolData(response.data);
-    // console.log($scope.sentimentData);
     setup(response);
-
-    // $scope.responseData = response.data;
-    // $scope.uploads = $scope.uploads.concat(response.data.files);
+    $scope.uploading = false;
+  };
+  $scope.onGlobalUploading = function () {
+    $scope.uploading = true;
   };
 
 
@@ -113,7 +109,7 @@ config(['$locationProvider', function($locationProvider, $routeProvider) {
   $scope.prev = function() {
     angular.element("#comic").removeData();
     $scope.convIdx -= 1;
-    $scope.convIdx = $scope.convIdx < 0 ? $scope.sentimentData[0].length : $scope.convIdx;
+    $scope.convIdx = $scope.convIdx < 0 ? $scope.sentimentData[0].length-1 : $scope.convIdx;
     doPlots();
   };
   $scope.random = function() {
@@ -156,7 +152,6 @@ config(['$locationProvider', function($locationProvider, $routeProvider) {
       title: dataList.length ? tag+" over time" : "upload message HTML (see guide)",
       legend: legend
     });
-    plot("#comic");
 
 // Add the lines.
     var anything = false;
@@ -178,13 +173,25 @@ config(['$locationProvider', function($locationProvider, $routeProvider) {
 // Render the image.
 
 
-    //if (anything)
-    plot/*.xlim([-1.5, 7.5])*/.draw();
+    if (anything) {
+      plot("#comic");
+      plot/*.xlim([-1.5, 7.5])*/.draw();
+      return true;
+    }
+    return false;
   }
 
   function setup(response) {
 
-    //response.data = response.data.filter(function(thread){return thread.Messages.length > 10;});
+    response.data = response.data.filter(
+      function (thread) {
+        return thread.Members.some(function(mem){
+          return thread.Messages.filter(function(mes){
+            return mes.User === mem;
+          }).length > 2;
+        });
+      }
+    );
 
     $scope.sentimentData = spoolData(response.data);
     // console.log($scope.sentimentData)
@@ -196,9 +203,13 @@ config(['$locationProvider', function($locationProvider, $routeProvider) {
 
   function doPlots() {
     angular.element("#comic").empty();
-    $scope.sentiments.forEach(function(sent){
-      plotData(sent);
-    })
+    var any = false;
+    for (var idx in $scope.sentiments) {
+      any |= plotData($scope.sentiments[idx]);
+    }
+    if (!any && $scope.legends) {
+      angular.element("#comic").append("There was not enough data to generate charts for conversation:\n"+$scope.legends[$scope.convIdx]);
+    }
   }
   doPlots();
 

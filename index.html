@@ -22,7 +22,7 @@
       <li><a href="http://hackmit.org">HackMIT</a></li>
       <li><a href="https://github.com/MatthewMerrill/">MattMerr</a></li>
       <li><a href="https://github.com/brandondsherman/">BrandSherm</a></li>
-      <li><a rel="author" href="/stack.txt">OurStack</a></li>
+      <li><a  href="https://github.com/brandondsherman/Sentimessenger/blob/master/tut.md">How-To</a></li>
     </ul>
   </div>
   <div id="topRight">
@@ -30,7 +30,7 @@
       <!--<span><a href="/"><img src="//imgs.xkcd.com/static/terrible_small_logo.png" alt="xkcd.com logo" height="83" width="185"/></a></span>-->
       <!--<span id="slogan">A webcomic of romance,<br/> sarcasm, math, and language.</span>-->
       <h1>SentiMessenger</h1>
-      A webcomic-themed sentiment analysis utility.
+      A webcomic-themed sentiment analysis utility. Takes in a Facebook messenger chatlog dump and makes pretty graphs. (See how-to for details)
     </div>
   </div>
   <div id="bgLeft" class="bg box"></div>
@@ -63,14 +63,19 @@
   </ul>
   </div>
 
-  <div ng-hide="sentimentData" class="uploadForm">
+  <div ng-hide="sentimentData||uploading" class="uploadForm">
     <h3>Upload</h3>
     <div
         class="btn btn-primary btn-upload"
         upload-button
         url="http://18.22.5.15:5001"
         on-success="onGlobalSuccess(response)"
+        on-upload="onGlobalUploading()"
     ></div>
+  </div>
+
+  <div style="margin: 30px;">
+    <span ng-show="uploading" us-spinner="{radius:10, width:8, length: 5}"></span>
   </div>
 
   <br />
@@ -79,47 +84,6 @@
   <div id="transcript" style="display: none"></div>
 </div>
 <div id="bottom" class="box">
-  <!--
-  <img src="//imgs.xkcd.com/s/a899e84.jpg" width="520" height="100" alt="Selected Comics" usemap="#comicmap"/>
-  <map id="comicmap" name="comicmap">
-    <area shape="rect" coords="0,0,100,100" href="/150/" alt="Grownups"/>
-    <area shape="rect" coords="104,0,204,100" href="/730/" alt="Circuit Diagram"/>
-    <area shape="rect" coords="208,0,308,100" href="/162/" alt="Angular Momentum"/>
-    <area shape="rect" coords="312,0,412,100" href="/688/" alt="Self-Description"/>
-    <area shape="rect" coords="416,0,520,100" href="/556/" alt="Alternative Energy Revolution"/>
-  </map>
-  <div>
-    <!--
-    Search comic titles and transcripts:
-    <script type="text/javascript" src="//www.google.com/jsapi"></script>
-    <script type="text/javascript">google.load('search', '1');google.setOnLoadCallback(function() {google.search.CustomSearchControl.attachAutoCompletion('012652707207066138651:zudjtuwe28q',document.getElementById('q'),'cse-search-box');});</script>
-    <form action="//www.google.com/cse" id="cse-search-box">
-    <div>
-    <input type="hidden" name="cx" value="012652707207066138651:zudjtuwe28q"/>
-    <input type="hidden" name="ie" value="UTF-8"/>
-    <input type="text" name="q" id="q" size="31"/>
-    <input type="submit" name="sa" value="Search"/>
-    </div>
-    </form>
-    <script type="text/javascript" src="//www.google.com/cse/brand?form=cse-search-box&amp;lang=en"></script>
-    --
-    <a href="/rss.xml">RSS Feed</a> - <a href="/atom.xml">Atom Feed</a>
-  </div>
-  <br />
-  <div id="comicLinks">
-    Comics I enjoy:<br/>
-    <a href="http://threewordphrase.com/">Three Word Phrase</a>,
-    <a href="http://www.smbc-comics.com/">SMBC</a>,
-    <a href="http://www.qwantz.com">Dinosaur Comics</a>,
-    <a href="http://oglaf.com/">Oglaf</a> (nsfw),
-    <a href="http://www.asofterworld.com">A Softer World</a>,
-    <a href="http://buttersafe.com/">Buttersafe</a>,
-    <a href="http://pbfcomics.com/">Perry Bible Fellowship</a>,
-    <a href="http://questionablecontent.net/">Questionable Content</a>,
-    <a href="http://www.buttercupfestival.com/">Buttercup Festival</a>,
-    <a href="http://www.mspaintadventures.com/?s=6&p=001901">Homestuck</a>,
-    <a href="http://www.jspowerhour.com/">Junior Scientist Power Hour</a>
-  </div>-->
   <div id="licenseText">
     <p>
       Site design and css is a parody of <a href="http://xkcd.com">XKCD</a>.
@@ -134,8 +98,8 @@
 
 <script src="bower_components/angular/angular.js"></script>
 <script src='bower_components/angular-upload/angular-upload.min.js'></script>
-
-<script src="moment.js"></script>
+<script src="bower_components/spin.js/spin.js"></script>
+<script src="bower_components/angular-spinner/angular-spinner.js"></script>
 
 <script src="app.js"></script>
 <script src="view1/view1.js"></script>
