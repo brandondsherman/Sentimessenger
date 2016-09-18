@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>My AngularJS App</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">-->
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="http://xkcd.com/s/b0dcca.css">
+
+  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+
+  <script src="http://d3js.org/d3.v2.min.js?2.10.0"></script>
+  <script src="xkcd.js"></script>
+
+</head>
+<body>
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <div id="topContainer" class="containerRow">
+    <div id="topLeft" class="containerCell">
+      <ul class="menu">
+        <li><a href="#!/view1">view1</a></li>
+        <li><a href="#!/view2">view2</a></li>
+      </ul>
+    </div>
+    <div id="topRight" class="containerCell">
+      <pre>
+        Hello World!
+        This is a test.
+        One more line.
+        another one.
+      </pre>
+    </div>
+    <div id="bgLeft" class="bg box"></div>
+    <div id="bgRight" class="bg box"></div>
+  </div>
+
+  <div ng-view></div>
+
+  <div>Angular seed app: v<span app-version></span></div>
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+  <script src="app.js"></script>
+  <script src="view1/view1.js"></script>
+  <script src="view2/view2.js"></script>
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>
+
+  <script>
+
+    // Generate some data.
+    function f1 (x) {
+      return Math.exp(-0.5 * (x - 1) * (x - 1)) * Math.sin(x + 0.2) + 0.05;
+    }
+
+    function f2 (x) {
+      return 0.5 * Math.cos(x - 0.5) + 0.1;
+    }
+
+    var xmin = -1.0,
+        xmax = 7,
+        N = 100,
+        data = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
+          return {x: d, y: f1(d)};
+        })
+    data2 = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
+      return {x: d, y: f2(d)};
+    });
+
+    // Build the plot.
+    var plot = xkcdplot();
+    plot("body");
+
+    // Add the lines.
+    plot.plot(data);
+    plot.plot(data2, {stroke: "red"});
+
+    // Render the image.
+    plot.xlim([-1.5, 7.5]).draw();
+
+  </script>
+</body>
+</html>
