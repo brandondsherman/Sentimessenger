@@ -8,8 +8,8 @@
 * Click on the "See More Settings" link
 * You'll start on the Privacy tab
 * You need to switch to the General tab
-	* [!Privacy Tab](/images/privacyTab.png)
-	* [!General Tab](/images/generalTab.png)
+	* ![Privacy Tab](/images/privacyTab.png)
+	* ![General Tab](/images/generalTab.png)
 * Click on the link to "Download a copy" 
 * Then click on the green button "Start My Archive"
 * You'll be prombted for you fb password
